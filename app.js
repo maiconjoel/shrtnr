@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const shortid = require('shortid');
 const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
+const dbUrl = process.env.DB_URL;
 
 const app = express();
 
@@ -11,7 +12,7 @@ const spec = YAML.load("./swagger.yml");
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(spec));
 
 // URL de conexão com o banco de dados MongoDB
-const MONGO_URI = 'mongodb://127.0.0.1:27017/';
+//const MONGO_URI = 'mongodb://127.0.0.1:27017/';
 
 // Opções de conexão com o banco de dados
 const mongooseOptions = {
@@ -21,7 +22,7 @@ const mongooseOptions = {
 };
 
 // Conecta ao banco de dados MongoDB
-mongoose.connect(MONGO_URI, mongooseOptions)
+mongoose.connect(dbUrl, mongooseOptions)
   .then(() => {
     console.log('Conexão com o MongoDB estabelecida com sucesso!');
   })
@@ -96,6 +97,6 @@ app.get('/url/:id', async (req, res) => {
 });
 
 // Iniciar servidor
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log('Servidor iniciado na porta 3000');
 });
