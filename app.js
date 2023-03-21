@@ -64,7 +64,8 @@ app.get('/encurtar', async (req, res) => {
 app.get('/:shortUrl', async (req, res) => {
   const url = await Url.findOne({ shortUrl: req.params.shortUrl });
   if (url) {
-    res.redirect(url.longUrl);
+    //res.redirect(url.longUrl);
+    res.json(url);
   } else {
     res.status(404).json({ error: 'URL não encontrada' });
   }
@@ -98,5 +99,5 @@ app.get('/url/:id', async (req, res) => {
 
 // Iniciar servidor
 app.listen(process.env.PORT || 3000, () => {
-  console.log('Servidor iniciado na porta' + process.env.PORT);
+  console.log('Servidor iniciado na porta: ' + process.env.PORT);
 });
