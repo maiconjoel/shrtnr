@@ -1,8 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const shortid = require('shortid');
+const swaggerUI = require('swagger-ui-express');
+const YAML = require('yamljs');
 
 const app = express();
+
+const spec = YAML.load("./swagger.yml");
+
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(spec));
 
 // URL de conexão com o banco de dados MongoDB
 const MONGO_URI = 'mongodb://127.0.0.1:27017/';
@@ -23,18 +29,17 @@ mongoose.connect(MONGO_URI, mongooseOptions)
     console.error('Erro ao conectar ao MongoDB:', err);
   });
 
-// Definir schema para as URLs encurtadas
+// Define o schema para as URLs encurtadas
 const urlSchema = new mongoose.Schema({
   longUrl: String,
   shortUrl: String,
   createdAt: { type: Date, default: Date.now },
 });
 
-// Criar modelo para as URLs encurtadas
+// Cria modelo para as URLs encurtadas
 const Url = mongoose.model('Url', urlSchema);
 
 // Rota para encurtar uma URL
-// Chamada: http://localhost:3000/encurtar?url=www.google.com
 app.get('/encurtar', async (req, res) => {
   try {
     const longUrl = req.query.url;    
@@ -55,7 +60,6 @@ app.get('/encurtar', async (req, res) => {
 });
 
 // Rota para redirecionar para a URL longa a partir da URL curta
-// Chamada: localhost:3000/rGsdUFU2h
 app.get('/:shortUrl', async (req, res) => {
   const url = await Url.findOne({ shortUrl: req.params.shortUrl });
   if (url) {
@@ -66,14 +70,12 @@ app.get('/:shortUrl', async (req, res) => {
 });
 
 // Rota para listar todas as URLs encurtadas em uma data específica
-// Chamada: http://localhost:3000/listar/2023-03-20
 app.get('/listar/:data', async (req, res) => {
   const urls = await Url.find({ createdAt: { $gte: new Date(req.params.data) } });
   res.json(urls);
 });
 
 // Rota para obter a URL curta a partir da URL longa
-// Chamada: http://localhost:3000/encurtado/www.google.com
 app.get('/encurtado/:longUrl', async (req, res) => {
   let url = await Url.findOne({ longUrl : req.params.longUrl });
   if (url) {
@@ -84,7 +86,6 @@ app.get('/encurtado/:longUrl', async (req, res) => {
 });
 
 // Rota para obter a URL curta a partir do seu id no banco
-// Chamada: http://localhost:3000/url/6417d3e9477ed461838cb3ab
 app.get('/url/:id', async (req, res) => {
   let url = await Url.findById( req.params.id );
   if (url) {

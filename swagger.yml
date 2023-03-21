@@ -1,0 +1,113 @@
+openapi: 3.0.0
+info:
+  title: Encurtador de URL
+  description: API para encurtar URLs
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/
+paths:
+  /encurtar:
+    get:
+      summary: Encurtar URL
+      description: Cria uma URL curta a partir de uma URL longa
+      parameters:
+        - name: url
+          in: query
+          required: true
+          schema:
+            type: string
+          description: URL longa a ser encurtada
+      responses:
+        '200':
+          description: URL encurtada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  longUrl:
+                    type: string
+                    description: URL longa original
+                  shortUrl:
+                    type: string
+                    description: URL curta gerada
+                  createdAt:
+                    type: string
+                    format: date-time
+                    description: Data de criação da URL encurtada
+        '400':
+          description: Erro na requisição
+        '500':
+          description: Erro interno do servidor
+    x-swagger-router-controller: encurtarUrl
+  /{shortUrl}:
+    get:
+      summary: Redirecionar para URL longa
+      description: Redireciona para a URL longa correspondente a uma URL curta
+      parameters:
+        - name: shortUrl
+          in: path
+          required: true
+          schema:
+            type: string
+          description: URL curta a ser redirecionada
+      responses:
+        '302':
+          description: Redirecionado com sucesso
+        '404':
+          description: URL curta não encontrada
+    x-swagger-router-controller: redirecionarUrl
+  /listar/{data}:
+    get:
+      summary: Listar URLs encurtadas em uma data específica
+      description: Retorna todas as URLs encurtadas em uma data específica
+      parameters:
+        - name: data
+          in: path
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Data a partir da qual as URLs serão listadas
+      responses:
+        '200':
+          description: URLs encontradas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    longUrl:
+                      type: string
+                      description: URL longa original
+                    shortUrl:
+                      type: string
+                      description: URL curta gerada
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: Data de criação da URL encurtada
+        '404':
+          description: URLs não encontradas
+    x-swagger-router-controller: listarUrls
+  /encurtado/{longUrl}:
+    get:
+      summary: Obter URL curta a partir de URL longa
+      description: Retorna a URL curta correspondente a uma URL longa
+      parameters:
+        - name: longUrl
+          in: path
+          required: true
+          schema:
+            type: string
+          description: URL longa a ser buscada
+      responses:
+        '200':
+          description: URL curta encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:

@@ -5,16 +5,18 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "generate:doc": "jsdoc -r app.js",
+    "dev": "node ./app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.20.2",
-    "ejs": "^3.1.9",
     "express": "^4.18.2",
-    "http-errors": "^2.0.0",
+    "jsdoc": "^4.0.2",
     "mongoose": "^7.0.2",
-    "shortid": "^2.2.16"
+    "shortid": "^2.2.16",
+    "swagger-ui-express": "^4.6.2",
+    "yamljs": "^0.3.0"
   }
 }
