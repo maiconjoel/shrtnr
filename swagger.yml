@@ -4,7 +4,7 @@ info:
   description: API para encurtar URLs
   version: 1.0.0
 servers:
-  - url: http://localhost:3000/
+  - url: https://shrtnr-dwzw.onrender.com/
 paths:
   /encurtar:
     get:

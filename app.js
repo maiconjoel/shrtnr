@@ -98,5 +98,5 @@ app.get('/url/:id', async (req, res) => {
 
 // Iniciar servidor
 app.listen(process.env.PORT || 3000, () => {
-  console.log('Servidor iniciado na porta 3000');
+  console.log('Servidor iniciado na porta' + process.env.PORT);
 });
